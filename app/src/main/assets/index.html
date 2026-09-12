@@ -1,0 +1,16 @@
+<!doctype html>
+<html><head><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Diet Tracker V3</title>
+<style>body{font-family:Arial,sans-serif;padding:20px;max-width:700px;margin:auto}button{padding:10px;margin:4px}input{padding:10px;margin:4px;width:90%}.card{padding:15px;border-radius:12px;background:#f3f3f3;margin:10px 0}</style>
+</head><body>
+<h1>Diet Tracker V3</h1>
+<div class="card"><input id="food" placeholder="Food name"><input id="protein" type="number" placeholder="Protein (g)"><input id="cal" type="number" placeholder="Calories"><button onclick="add()">Add Food</button></div>
+<div id="list"></div><h2>Today's Total</h2><p id="total">Protein: 0 g | Calories: 0 kcal</p>
+<script>
+let foods=JSON.parse(localStorage.foods||'[]');
+function save(){localStorage.foods=JSON.stringify(foods);render()}
+function add(){let n=food.value,p=+protein.value||0,c=+cal.value||0;if(n){foods.push({n,p,c,e:false});save();food.value=protein.value=cal.value=''}}
+function toggle(i){foods[i].e=!foods[i].e;save()}
+function render(){list.innerHTML=foods.map((x,i)=>`<div class="card"><label><input type="checkbox" ${x.e?'checked':''} onchange="toggle(${i})">${x.n} — ${x.p} g protein, ${x.c} kcal</label></div>`).join('');let p=0,c=0;foods.filter(x=>x.e).forEach(x=>{p+=x.p;c+=x.c});total.textContent=`Protein: ${p} g | Calories: ${c} kcal`}
+render();
+</script></body></html>
